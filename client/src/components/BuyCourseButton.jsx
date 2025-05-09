@@ -37,7 +37,7 @@ const BuyCourseButton = ({ courseId }) => {
           Please wait
         </>
       ) : (
-        "Purchase Course"
+        "Enroll Course"
       )}
     </Button>
   );
