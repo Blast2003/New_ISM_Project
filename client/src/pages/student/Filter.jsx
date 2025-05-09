@@ -13,17 +13,11 @@ import { Separator } from "@/components/ui/separator";
 import React, { useState } from "react";
 
 const categories = [
-  { id: "nextjs", label: "Next JS" },
-  { id: "data science", label: "Data Science" },
-  { id: "frontend development", label: "Frontend Development" },
-  { id: "fullstack development", label: "Fullstack Development" },
-  { id: "mern stack development", label: "MERN Stack Development" },
-  { id: "backend development", label: "Backend Development" },
-  { id: "javascript", label: "Javascript" },
-  { id: "python", label: "Python" },
-  { id: "docker", label: "Docker" },
-  { id: "mongodb", label: "MongoDB" },
-  { id: "html", label: "HTML" },
+  { id: "IT Certifications", label: "IT Certifications" },
+  { id: "Network & Security", label: "Network & Security" },
+  { id: "Hardware", label: "Hardware" },
+  { id: "Operating Systems", label: "Operating Systems" },
+  { id: "Servers & Other IT", label: "Servers & Other IT" },
 ];
 
 const Filter = ({ handleFilterChange }) => {
