@@ -149,7 +149,7 @@ const Profile = () => {
                     onChange={onChangeHandler}
                     type="file"
                     accept="image/*"
-                    className="col-span-3"
+                    className="col-span-3 cursor-pointer"
                   />
                 </div>
               </div>
