@@ -1,4 +1,4 @@
-import BuyCourseButton from "@/components/BuyCourseButton";
+import EnrollCourseButton from "@/components/EnrollCourseButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -105,7 +105,7 @@ const CourseDetail = () => {
               {purchased ? (
                 <Button onClick={handleContinueCourse} className="w-full">Continue Course</Button>
               ) : (
-                <BuyCourseButton courseId={courseId} />
+                <EnrollCourseButton courseId={courseId} />
               )}
             </CardFooter>
           </Card>

@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { Button } from "./ui/button";
-import { useCreateCheckoutSessionMutation } from "@/features/api/purchaseApi";
+import { useCreateEnrollMutation } from "@/features/api/enrollApi";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-const BuyCourseButton = ({ courseId }) => {
-  const [createCheckoutSession, {data, isLoading, isSuccess, isError, error }] =
-    useCreateCheckoutSessionMutation();
+const EnrollCourseButton = ({ courseId }) => {
+  const [createEnroll, {data, isLoading, isSuccess, isError, error }] =
+  useCreateEnrollMutation();
 
-  const purchaseCourseHandler = async () => {
-    await createCheckoutSession(courseId);
+  const enrollCourseHandler  = async () => {
+    await createEnroll(courseId);
   };
 
   useEffect(()=>{
@@ -21,14 +21,14 @@ const BuyCourseButton = ({ courseId }) => {
        }
     } 
     if(isError){
-      toast.error(error?.data?.message || "Failed to create checkout session")
+      toast.error(error?.data?.message || "Failed to enroll session")
     }
   },[data, isSuccess, isError, error])
 
   return (
     <Button
       disabled={isLoading}
-      onClick={purchaseCourseHandler}
+      onClick={enrollCourseHandler}
       className="w-full"
     >
       {isLoading ? (
@@ -43,4 +43,4 @@ const BuyCourseButton = ({ courseId }) => {
   );
 };
 
-export default BuyCourseButton;
+export default EnrollCourseButton;
