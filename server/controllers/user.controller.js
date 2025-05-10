@@ -134,15 +134,7 @@ export const GGLogin = async (req, res) => {
             return generateToken(res, user, `Welcome ${user.name}`);
         }
 
-        console.log("Current user: ", user)
-
-        console.log("user.password: ", user.password);
-
-        console.log("client password ", password);
-
         const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-        console.log("isPasswordMatch: ", isPasswordMatch)
 
         if (!isPasswordMatch) {
             return res.status(400).json({
@@ -203,7 +195,7 @@ export const updateProfile = async (req,res) => {
     try {
         const userId = req.id;
         const {name} = req.body;
-        const profilePhoto = req.file;
+        let profilePhoto = req.file;
 
         const user = await User.findById(userId);
         if(!user){
