@@ -36,7 +36,6 @@ const CourseTab = () => {
     description: "",
     category: "",
     courseLevel: "",
-    coursePrice: "",
     courseThumbnail: "",
   });
 
@@ -56,7 +55,6 @@ const CourseTab = () => {
         description: course.description,
         category: course.category,
         courseLevel: course.courseLevel,
-        coursePrice: course.coursePrice,
         courseThumbnail: "",
       });
     }
@@ -97,7 +95,6 @@ const CourseTab = () => {
     formData.append("description", input.description);
     formData.append("category", input.category);
     formData.append("courseLevel", input.courseLevel);
-    formData.append("coursePrice", input.coursePrice);
     formData.append("courseThumbnail", input.courseThumbnail);
 
     await editCourse({ formData, courseId });
@@ -209,17 +206,6 @@ const CourseTab = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label>Price in (INR)</Label>
-              <Input
-                type="number"
-                name="coursePrice"
-                value={input.coursePrice}
-                onChange={changeEventHandler}
-                placeholder="199"
-                className="w-fit"
-              />
-            </div>
           </div>
           <div>
             <Label>Course Thumbnail</Label>
@@ -227,7 +213,7 @@ const CourseTab = () => {
               type="file"
               onChange={selectThumbnail}
               accept="image/*"
-              className="w-fit"
+              className="w-fit cursor-pointer"
             />
             {previewThumbnail && (
               <img
