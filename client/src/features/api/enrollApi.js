@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const COURSE_ENROLL_API = "http://localhost:3000/api/v1/enroll";
+const COURSE_ENROLL_API = "http://localhost:3000/api/v1/courseEnroll";
 
 export const enrollApi = createApi({
   reducerPath: "enrollApi",
@@ -8,6 +8,7 @@ export const enrollApi = createApi({
     baseUrl: COURSE_ENROLL_API,
     credentials: "include",
   }),
+  tagTypes: ["EnrolledCourses"], // Define tag for enrolled courses
   endpoints: (builder) => ({
     // Ghi danh vào khoá học
     createEnroll: builder.mutation({
@@ -16,6 +17,7 @@ export const enrollApi = createApi({
         method: "POST",
         body: { courseId },
       }),
+      invalidatesTags: ["EnrolledCourses"], // Invalidate EnrolledCourses tag on success
     }),
     // Lấy chi tiết khoá học + trạng thái ghi danh
     getCourseDetailWithStatus: builder.query({
@@ -30,6 +32,7 @@ export const enrollApi = createApi({
         url: `/`,
         method: "GET",
       }),
+      providesTags: ["EnrolledCourses"], // Provide EnrolledCourses tag for cache
     }),
   }),
 });

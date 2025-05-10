@@ -84,13 +84,22 @@ export const getCourseDetailWithEnrollStatus = async (req, res) => {
 };
 
 // API lấy toàn bộ khóa học đã ghi danh
-export const getAllEnrolledCourse = async (_, res) => {
+export const getAllEnrolledCourse = async (req, res) => {
   try {
-    const enrolledCourse = await CourseEnroll.find({
-      status: "enrolled",
-    }).populate("courseId");
+    const userId = req.id; 
 
-    return res.status(200).json({ enrolledCourse });
+    const enrolledCourses = await CourseEnroll.find({
+      userId,
+      status: "enrolled",
+    }).populate({
+      path: "courseId",
+      select: "courseTitle subTitle description courseThumbnail coursePrice category courseLevel creator enrolledStudents lectures isPublished createdAt",
+    });
+
+    // Extract the course data from populated courseId
+    const courses = enrolledCourses.map((enroll) => enroll.courseId);
+
+    return res.status(200).json({ enrolledCourses: courses });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });

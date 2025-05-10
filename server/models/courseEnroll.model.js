@@ -10,18 +10,10 @@ const courseEnrollSchema = new mongoose.Schema({
         ref:'User',
         required:true
     },
-    amount:{
-        type:Number,
-        required:true
-    },
     status:{
         type:String,
         enum:['enrolled', 'unenrolled'],
         default:'unenrolled'
-    },
-    enrollId:{
-        type:mongoose.Schema.Types.ObjectId,
-        required:true
     }
 
 },{timestamps:true});

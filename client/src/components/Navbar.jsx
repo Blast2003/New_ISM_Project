@@ -1,5 +1,5 @@
-import { Menu, School } from "lucide-react";
-import React, { useEffect } from "react";
+import { Menu } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import DarkMode from "@/DarkMode";
 import {
   Sheet,
@@ -33,8 +33,11 @@ const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Track DropdownMenu open state
+
   const logoutHandler = async () => {
     await logoutUser();
+    setIsMenuOpen(false); // Close menu on logout
   };
 
   useEffect(() => {
@@ -42,7 +45,11 @@ const Navbar = () => {
       toast.success(data?.message || "User log out.");
       navigate("/login");
     }
-  }, [isSuccess]);
+  }, [isSuccess, data, navigate]);
+
+  const handleMenuItemClick = () => {
+    setIsMenuOpen(false); // Close menu when any item is clicked
+  };
 
   return (
     <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-10">
@@ -58,15 +65,16 @@ const Navbar = () => {
             </h1>
           </Link>
         </div>
-        {/* User icons and dark mode icon  */}
+        {/* User icons and dark mode icon */}
         <div className="flex items-center gap-8">
           {user ? (
-            <DropdownMenu>
+            <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <DropdownMenuTrigger asChild>
                 <Avatar>
                   <AvatarImage
                     src={user?.photoUrl || "https://github.com/shadcn.png"}
                     alt="@shadcn"
+                    className="cursor-pointer"
                   />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
@@ -75,12 +83,11 @@ const Navbar = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleMenuItemClick}>
                     <Link to="my-learning">My learning</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    {" "}
-                    <Link to="profile">Edit Profile</Link>{" "}
+                  <DropdownMenuItem onClick={handleMenuItemClick}>
+                    <Link to="profile">Edit Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={logoutHandler}>
                     Log out
@@ -89,7 +96,9 @@ const Navbar = () => {
                 {user?.role === "instructor" && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem><Link to="/admin/dashboard">Dashboard</Link></DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleMenuItemClick}>
+                      <Link to="/admin/dashboard">Dashboard</Link>
+                    </DropdownMenuItem>
                   </>
                 )}
               </DropdownMenuContent>
@@ -105,10 +114,10 @@ const Navbar = () => {
           <DarkMode />
         </div>
       </div>
-      {/* Mobile device  */}
+      {/* Mobile device */}
       <div className="flex md:hidden items-center justify-between px-4 h-full">
         <h1 className="font-extrabold text-2xl">E-learning</h1>
-        <MobileNavbar user={user}/>
+        <MobileNavbar user={user} />
       </div>
     </div>
   );
@@ -116,9 +125,9 @@ const Navbar = () => {
 
 export default Navbar;
 
-const MobileNavbar = ({user}) => {
+const MobileNavbar = ({ user }) => {
   const navigate = useNavigate();
-  
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -132,7 +141,9 @@ const MobileNavbar = ({user}) => {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="flex flex-row items-center justify-between mt-2">
-          <SheetTitle> <Link to="/">E-Learning</Link></SheetTitle>
+          <SheetTitle>
+            <Link to="/">E-Learning</Link>
+          </SheetTitle>
           <DarkMode />
         </SheetHeader>
         <Separator className="mr-2" />
@@ -144,7 +155,9 @@ const MobileNavbar = ({user}) => {
         {user?.role === "instructor" && (
           <SheetFooter>
             <SheetClose asChild>
-              <Button type="submit" onClick={()=> navigate("/admin/dashboard")}>Dashboard</Button>
+              <Button type="submit" onClick={() => navigate("/admin/dashboard")}>
+                Dashboard
+              </Button>
             </SheetClose>
           </SheetFooter>
         )}

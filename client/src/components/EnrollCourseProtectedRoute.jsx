@@ -17,6 +17,6 @@ const EnrollCourseProtectedRoute = ({children}) => {
           );
         }
 
-    return data?.purchased ? children : <Navigate to={`/course-detail/${courseId}`}/>
+    return data?.enrolled ? children : <Navigate to={`/course-detail/${courseId}`} />;
 }
 export default EnrollCourseProtectedRoute;

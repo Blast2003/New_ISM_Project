@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useGetCourseDetailWithStatusQuery } from "@/features/api/purchaseApi";
+import { useGetCourseDetailWithStatusQuery } from "@/features/api/enrollApi";
 import { BadgeInfo, Lock, PlayCircle } from "lucide-react";
 import React from "react";
 import ReactPlayer from "react-player";
@@ -34,11 +34,11 @@ const CourseDetail = () => {
     }
   if (isError) return <h>Failed to load course details</h>;
 
-  const { course, purchased } = data;
-  console.log(purchased);
+  const { course, enrolled } = data;
+  console.log(enrolled);
 
   const handleContinueCourse = () => {
-    if(purchased){
+    if(enrolled){
       navigate(`/course-progress/${courseId}`)
     }
   }
@@ -69,7 +69,7 @@ const CourseDetail = () => {
           <h1 className="font-bold text-xl md:text-2xl">Description</h1>
           <p
             className="text-sm"
-            dangerouslySetInnerHTML={{ __html: course.description }}
+            dangerouslySetInnerHTML={{ __html: course?.description }}
           />
           <Card>
             <CardHeader>
@@ -80,7 +80,11 @@ const CourseDetail = () => {
               {course.lectures.map((lecture, idx) => (
                 <div key={idx} className="flex items-center gap-3 text-sm">
                   <span>
-                    {true ? <PlayCircle size={14} /> : <Lock size={14} />}
+                    {enrolled || lecture.isPreviewFree ? (
+                      <PlayCircle size={14} />
+                    ) : (
+                      <Lock size={14} />
+                    )}
                   </span>
                   <p>{lecture.lectureTitle}</p>
                 </div>
@@ -102,7 +106,7 @@ const CourseDetail = () => {
               <Separator className="my-2" />
             </CardContent>
             <CardFooter className="flex justify-center p-4">
-              {purchased ? (
+              {enrolled ? (
                 <Button onClick={handleContinueCourse} className="w-full">Continue Course</Button>
               ) : (
                 <EnrollCourseButton courseId={courseId} />
