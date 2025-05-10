@@ -12,7 +12,7 @@ const router = express.Router();
 router.route("/enroll").post(isAuthenticated, createEnroll);
 
 // Lấy chi tiết khoá học + trạng thái đã ghi danh
-router.route("/course/:courseId/detail-with-status").get(
+router.route("/course/:courseId/{couse-id}").get(
   isAuthenticated,
   getCourseDetailWithEnrollStatus
 );
