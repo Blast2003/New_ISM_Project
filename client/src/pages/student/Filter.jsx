@@ -41,7 +41,7 @@ const Filter = ({ handleFilterChange }) => {
   }
   return (
     <div className="w-full md:w-[20%]">
-      <div className="flex items-center justify-between">
+      {/* <div className="flex items-center justify-between">
         <h1 className="font-semibold text-lg md:text-xl">Filter Options</h1>
         <Select onValueChange={selectByPriceHandler}>
           <SelectTrigger>
@@ -55,7 +55,7 @@ const Filter = ({ handleFilterChange }) => {
             </SelectGroup>
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
       <Separator className="my-4" />
       <div>
         <h1 className="font-semibold mb-2">CATEGORY</h1>
