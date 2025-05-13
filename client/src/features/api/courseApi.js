@@ -4,7 +4,7 @@ const COURSE_API = "http://localhost:3000/api/v1/course";
 
 export const courseApi = createApi({
   reducerPath: "courseApi",
-  tagTypes: ["Refetch_Creator_Course", "Refetch_Lecture"],
+  tagTypes: ["Refetch_Creator_Course", "Refetch_Lecture",  "CourseCount", "PublishedCourses", "SearchResults",  "CourseDetail"],
   baseQuery: fetchBaseQuery({
     baseUrl: COURSE_API,
     credentials: "include",
@@ -16,7 +16,7 @@ export const courseApi = createApi({
         method: "POST",
         body: { courseTitle, category },
       }),
-      invalidatesTags: ["Refetch_Creator_Course"],
+      invalidatesTags: ["Refetch_Creator_Course", "CourseCount"],
     }),
     getSearchCourse:builder.query({
       query: ({searchQuery, categories, sortByPrice}) => {
@@ -38,13 +38,22 @@ export const courseApi = createApi({
           url:queryString,
           method:"GET", 
         }
-      }
+      },
+      providesTags: ["SearchResults"],
     }),
     getPublishedCourse: builder.query({
       query: () => ({
         url: "/published-courses",
         method: "GET",
       }),
+      providesTags: ["PublishedCourses"],
+    }),
+    getCoursesCount: builder.query({
+      query: () => ({
+        url: "/count",
+        method: "GET",
+      }),
+      providesTags: ["CourseCount"],
     }),
     getCreatorCourse: builder.query({
       query: () => ({
@@ -66,6 +75,9 @@ export const courseApi = createApi({
         url: `/${courseId}`,
         method: "GET",
       }),
+      providesTags: (result, error, id) =>
+       // if we got a result, tag it by this courseId
+       result ? [{ type: "CourseDetail", id }] : [],
     }),
     createLecture: builder.mutation({
       query: ({ lectureTitle, courseId }) => ({
@@ -73,6 +85,11 @@ export const courseApi = createApi({
         method: "POST",
         body: { lectureTitle },
       }),
+      invalidatesTags: (result, error, { courseId }) => [
+       { type: "CourseDetail", id: courseId },
+       // you can also invalidate your lecture‐list tag if you have one:
+       { type: "Refetch_Lecture", id: courseId },
+     ],
     }),
     getCourseLecture: builder.query({
       query: (courseId) => ({
@@ -84,34 +101,40 @@ export const courseApi = createApi({
     editLecture: builder.mutation({
       query: ({
         lectureTitle,
-        videoInfo,
+        videoUrl,
         isPreviewFree,
         courseId,
         lectureId,
       }) => ({
         url: `/${courseId}/lecture/${lectureId}`,
         method: "POST",
-        body: { lectureTitle, videoInfo, isPreviewFree },
+        body: { lectureTitle, videoUrl, isPreviewFree },
       }),
+      invalidatesTags: ["Refetch_Lecture"],
     }),
     removeLecture: builder.mutation({
       query: (lectureId) => ({
         url: `/lecture/${lectureId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Refetch_Lecture"],
+      invalidatesTags: ["Refetch_Lecture", "CourseDetail"],
     }),
     getLectureById: builder.query({
       query: (lectureId) => ({
         url: `/lecture/${lectureId}`,
         method: "GET",
       }),
-    }),
+      providesTags: (result, error, lectureId) =>
+       result
+         ? [{ type: "Refetch_Lecture", id: lectureId }]
+         : [],
+      }),
     publishCourse: builder.mutation({
       query: ({ courseId, query }) => ({
         url: `/${courseId}?publish=${query}`,
         method: "PATCH",
       }),
+      invalidatesTags: ["Refetch_Creator_Course", "PublishedCourses", "SearchResults"],
     }),
   }),
 });
@@ -119,6 +142,7 @@ export const {
   useCreateCourseMutation,
   useGetSearchCourseQuery,
   useGetPublishedCourseQuery,
+  useGetCoursesCountQuery,
   useGetCreatorCourseQuery,
   useEditCourseMutation,
   useGetCourseByIdQuery,

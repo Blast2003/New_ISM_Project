@@ -1,14 +1,42 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetPurchasedCoursesQuery } from "@/features/api/purchaseApi";
 import React from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import loader from "../../assets/loader.svg";
+import { useGetCoursesCountQuery, useGetPublishedCourseQuery } from "@/features/api/courseApi";
+
+
+const CustomizedAxisTick = ({ x, y, payload }) => {
+const words = payload.value.split(" ");
+return (
+ <text
+   x={x}
+   y={y + 10}
+   textAnchor="end"
+   fill="#fff" 
+   transform={`rotate(-35, ${x}, ${y + 10})`}
+   fontSize={12}
+ >
+   {words.map((word, i) => (
+     <tspan x={x} dy={i === 0 ? 0 : 14} key={i}>
+       {word}
+     </tspan>
+   ))}
+ </text>
+);
+};
+
 
 const Dashboard = () => {
 
-  const {data, isSuccess, isError, isLoading} = useGetPurchasedCoursesQuery();
+  const {data: enrolledCourse, isSuccess, isError, isLoading} = useGetPublishedCourseQuery();
 
-  if (isLoading) {
+  const {
+    data: countData,
+    isLoading: isLoadingCount,
+    isError: isErrorCount
+  } = useGetCoursesCountQuery();
+
+  if (isLoading && isLoadingCount) {
     return (
               <div className="flex flex-col items-center justify-center h-96">
                 <img width="100" src={loader} alt="loader" />
@@ -17,19 +45,21 @@ const Dashboard = () => {
             );
   }
 
-  if(isError) return <h1 className="text-red-500">Failed to get purchased course</h1>
+  if(isError || isErrorCount) return <h1 className="text-red-500">Failed to get course virtualization</h1>
 
-  //
-  const {purchasedCourse} = data || [];
 
-  const courseData = purchasedCourse.map((course)=> ({
-    name:course.courseId.courseTitle,
-    view:course.courseId.coursePrice
+  console.log("aaaaaaaaaaaaaa", enrolledCourse)
+
+  const totalSales = countData?.count ?? 0;
+
+
+  const courseData = enrolledCourse?.courses?.map((course, index)=> ({
+    name: `Course ${index + 1}`, 
+    view:course?.coursePrice
   }))
 
-  const totalRevenue = purchasedCourse.reduce((acc,element) => acc+(element.amount || 0), 0);
+  const totalRevenue = enrolledCourse?.courses.reduce((acc,element) => acc+(element.coursePrice || 0), 0);
 
-  const totalSales = purchasedCourse.length;
   return (
     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
       <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -58,15 +88,14 @@ const Dashboard = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart data={courseData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
               <XAxis
                 dataKey="name"
-                stroke="#6b7280"
-                angle={-30} // Rotated labels for better visibility
-                textAnchor="end"
-                interval={0} // Display all labels
+                height={60}
+                interval={0}
+                tick={<CustomizedAxisTick />}
               />
               <YAxis stroke="#6b7280" />
               <Tooltip formatter={(value, name) => [`${value}👁`, name]} />

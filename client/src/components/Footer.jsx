@@ -3,15 +3,15 @@ import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/f
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-gray-900 text-gray-300 mt-5">
+    <footer className="w-full dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200  dark:text-gray-300  text-gray-900 mt-5">
       {/* Top Call-to-Action */}
       <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row md:justify-between gap-8">
         <div className="flex-1 max-w-md">
           <div className="flex items-center mb-4">
             <img src={Blogo1} alt="IT KMS Logo" width={32} height={32} className="mr-2" />
-            <span className="text-white font-semibold text-xl">IT Knowledge Management</span>
+            <span className="dark:text-white text-gray-950 font-semibold text-xl">IT Knowledge Management</span>
           </div>
-          <p className="text-gray-400 mb-2">
+          <p className="dark:text-gray-400 text-gray-900 mb-2">
             Join our community to get the latest courses, tutorials, and resources delivered straight to your inbox.
           </p>
           <button className="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition-colors">
@@ -21,7 +21,7 @@ export default function Footer() {
         {/* Links Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-12 gap-y-6 flex-1">
           <div className="flex flex-col space-y-2 text-sm">
-            <span className="text-white font-semibold">Platform</span>
+            <span className="dark:text-white text-gray-900 font-semibold">Platform</span>
             <a href="#" className="hover:underline">Courses</a>
             <a href="#" className="hover:underline">Instructors</a>
             <a href="#" className="hover:underline">My Progress</a>

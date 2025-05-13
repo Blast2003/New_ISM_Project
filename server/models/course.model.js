@@ -17,7 +17,7 @@ const courseSchema = new mongoose.Schema({
     },
     coursePrice:{
         type:Number,
-        default: 0
+        default: () => Math.floor(Math.random() * 100) + 1
     },
     courseThumbnail:{
         type:String

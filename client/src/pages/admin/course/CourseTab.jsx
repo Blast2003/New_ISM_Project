@@ -28,6 +28,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
+import loader from "../../../assets/loader.svg"
+
 const CourseTab = () => {
   
   const [input, setInput] = useState({
@@ -45,6 +47,8 @@ const CourseTab = () => {
     useGetCourseByIdQuery(courseId);
 
     const [publishCourse, {}] = usePublishCourseMutation();
+
+    console.log(courseByIdData)
  
   useEffect(() => {
     if (courseByIdData?.course) { 
@@ -121,7 +125,14 @@ const CourseTab = () => {
     }
   }, [isSuccess, error]);
 
-  if(courseByIdLoading) return <h1>Loading...</h1>
+  if (courseByIdLoading) {
+            return (
+              <div className="flex flex-col items-center justify-center h-96">
+                <img width="100" src={loader} alt="loader" />
+                <p>Loading...</p>
+              </div>
+            );
+          }
  
   return (
     <Card>
@@ -169,7 +180,7 @@ const CourseTab = () => {
             <div>
               <Label>Category</Label>
               <Select
-                defaultValue={input.category}
+                value={input.category}
                 onValueChange={selectCategory}
               >
                 <SelectTrigger className="w-[180px]">
@@ -190,7 +201,7 @@ const CourseTab = () => {
             <div>
               <Label>Course Level</Label>
               <Select
-                defaultValue={input.courseLevel}
+                value={input.courseLevel}
                 onValueChange={selectCourseLevel}
               >
                 <SelectTrigger className="w-[180px]">
