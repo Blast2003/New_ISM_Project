@@ -22,6 +22,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const Login = () => {
   const [signupInput, setSignupInput] = useState({
@@ -111,11 +112,10 @@ const Login = () => {
   return (
     <div className="flex items-center w-full justify-center mt-20">
       <Tabs defaultValue="login" className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="signup">Signup</TabsTrigger>
-          <TabsTrigger value="login">Login</TabsTrigger>
-        </TabsList>
-        <TabsContent value="signup">
+        <TabsList className="w-full flex justify-center mb-4">
+          <p className="font-medium text-sm text-white">Login</p>
+          </TabsList>
+        {/* <TabsContent value="signup">
           <Card>
             <CardHeader>
               <CardTitle>Signup</CardTitle>
@@ -174,7 +174,7 @@ const Login = () => {
               </Button>
             </CardFooter>
           </Card>
-        </TabsContent>
+        </TabsContent> */}
         <TabsContent value="login">
           <Card>
             <CardHeader>
@@ -217,7 +217,7 @@ const Login = () => {
             {/* Primary Login Button */}
             <CardFooter className="flex flex-col space-y-4">
               <Button
-                className="w-[180px] h-[40px]"
+                className="w-[190px] h-[40px]"
                 disabled={loginIsLoading}
                 onClick={() => handleRegistration("login")}
               >

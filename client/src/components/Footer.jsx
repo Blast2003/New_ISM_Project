@@ -3,7 +3,7 @@ import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/f
 
 export default function Footer() {
   return (
-    <footer className="w-full dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200  dark:text-gray-300  text-gray-900 mt-5">
+    <footer className="w-full dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200  dark:text-gray-300  text-gray-900 mt-10">
       {/* Top Call-to-Action */}
       <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row md:justify-between gap-8">
         <div className="flex-1 max-w-md">
